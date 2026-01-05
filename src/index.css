@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme {
+  --color-kenya-green: #22c55e;
+  --color-kenya-gold: #eab308;
+  --color-kenya-red: #ef4444;
+  --color-kenya-black: #000000;
+  --color-dark-bg: #0f172a;
+  --color-dark-card: #1e293b;
+  --color-dark-hover: #334155;
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+body {
+  background-color: var(--color-dark-bg);
+  color: #f1f5f9;
+  /* Slate 100 */
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
