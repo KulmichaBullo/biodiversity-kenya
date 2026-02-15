@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Map, TreePine, PawPrint, ArrowRight, Compass, Sparkles, TrendingUp } from 'lucide-react';
 import KenyaMap from '../components/KenyaMap';
@@ -11,10 +12,10 @@ const HERO_IMAGE = "https://images.unsplash.com/photo-1516426122078-c23e76319801
 
 const Home = () => {
     const navigate = useNavigate();
-    const [trending, setTrending] = React.useState([]);
-    const [loading, setLoading] = React.useState(true);
+    const [trending, setTrending] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    React.useEffect(() => {
+    useEffect(() => {
         const fetchTrending = async () => {
             try {
                 // Fetch general popular species in Kenya
