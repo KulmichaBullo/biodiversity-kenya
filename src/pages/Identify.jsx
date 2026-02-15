@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { inaturalistApi } from '../services/inaturalist';
 import ImageUpload from '../components/ImageUpload';
 import SpeciesModal from '../components/SpeciesModal';
-import { ArrowLeft, Sparkles, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Sparkles, AlertCircle, CheckCircle } from 'lucide-react';
+import { ListSkeleton } from '../components/Skeleton';
 
 const Identify = () => {
     const [selectedImage, setSelectedImage] = useState(null);
@@ -127,9 +128,9 @@ const Identify = () => {
 
             {/* Loading State */}
             {loading && (
-                <div className="flex flex-col items-center justify-center py-16">
-                    <Loader2 className="w-16 h-16 animate-spin text-green-500 mb-4" />
-                    <p className="text-slate-400 text-lg">Analyzing image...</p>
+                <div className="py-12">
+                    <ListSkeleton count={4} />
+                    <p className="text-slate-400 text-center mt-8 animate-pulse text-lg">Analyzing image through neural networks...</p>
                 </div>
             )}
 

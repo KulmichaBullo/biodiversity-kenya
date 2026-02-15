@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { gbifApi } from '../services/gbif';
 import { inaturalistApi, TAXON_IDS } from '../services/inaturalist';
-import { Loader2, ArrowLeft, Leaf, PawPrint, Info, ExternalLink, Filter, Camera, Bird, Bug, Fish, AlignLeft, Search, ChevronDown, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Leaf, PawPrint, Info, ExternalLink, Filter, Camera, Bird, Bug, Fish, AlignLeft, Search, ChevronDown, ChevronRight } from 'lucide-react';
 import SpeciesModal from '../components/SpeciesModal';
+import { ListSkeleton } from '../components/Skeleton';
 
 const CountyDetails = () => {
     const { key } = useParams();
@@ -214,9 +215,7 @@ const CountyDetails = () => {
 
                 {/* Grid */}
                 {loading ? (
-                    <div className="flex justify-center items-center h-96">
-                        <Loader2 className="w-12 h-12 animate-spin text-green-500" />
-                    </div>
+                    <ListSkeleton count={6} />
                 ) : (
                     <>
                         {species.length === 0 ? (

@@ -23,7 +23,7 @@ const Layout = () => {
                         <div className="hidden md:flex space-x-8">
                             <Link to="/" className="text-sm font-medium text-slate-400 hover:text-green-400 transition-colors">Home</Link>
                             <Link to="/counties" className="text-sm font-medium text-slate-400 hover:text-green-400 transition-colors">Counties</Link>
-                            <Link to="/about" className="text-sm font-medium text-slate-400 hover:text-green-400 transition-colors">About</Link>
+                            <Link to="/identify" className="text-sm font-medium text-slate-400 hover:text-green-400 transition-colors">Identify</Link>
                         </div>
 
                         <button
@@ -41,6 +41,7 @@ const Layout = () => {
                         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                             <Link to="/" className="block px-3 py-3 text-slate-300 hover:bg-slate-800 hover:text-green-400 rounded-lg font-medium transition-all">Home</Link>
                             <Link to="/counties" className="block px-3 py-3 text-slate-300 hover:bg-slate-800 hover:text-green-400 rounded-lg font-medium transition-all">Counties</Link>
+                            <Link to="/identify" className="block px-3 py-3 text-slate-300 hover:bg-slate-800 hover:text-green-400 rounded-lg font-medium transition-all">Identify Species</Link>
                         </div>
                     </div>
                 )}

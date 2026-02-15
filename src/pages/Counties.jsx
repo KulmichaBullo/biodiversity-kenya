@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { gbifApi } from '../services/gbif';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Search, MapPin, Loader2, ArrowRight } from 'lucide-react';
+import { Search, MapPin, ArrowRight } from 'lucide-react';
 import KenyaMap from '../components/KenyaMap';
 import { getCountyImage } from '../data/countyImages';
+import { ListSkeleton } from '../components/Skeleton';
 
 const Counties = () => {
     const [counties, setCounties] = useState([]);
@@ -81,9 +82,7 @@ const Counties = () => {
                 {/* Scrollable Grid */}
                 <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar pb-24">
                     {loading ? (
-                        <div className="flex justify-center items-center h-64">
-                            <Loader2 className="w-10 h-10 animate-spin text-green-500" />
-                        </div>
+                        <ListSkeleton count={9} />
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                             {filteredCounties.map((county) => (

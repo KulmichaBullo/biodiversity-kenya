@@ -1,6 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Map, TreePine, PawPrint, ArrowRight, Compass, Sparkles } from 'lucide-react';
+import { Map, TreePine, PawPrint, ArrowRight, Compass, Sparkles, TrendingUp } from 'lucide-react';
 import KenyaMap from '../components/KenyaMap';
+import { gbifApi } from '../services/gbif';
+import { inaturalistApi } from '../services/inaturalist';
+import { ListSkeleton } from '../components/Skeleton';
 
 // Using a high-quality placeholder image for hero if specific unsplash one fails, 
 // but sticking to the previous quality one for now.
@@ -8,10 +11,45 @@ const HERO_IMAGE = "https://images.unsplash.com/photo-1516426122078-c23e76319801
 
 const Home = () => {
     const navigate = useNavigate();
+    const [trending, setTrending] = React.useState([]);
+    const [loading, setLoading] = React.useState(true);
 
-    const handleSelectCounty = (countyName) => {
-        // Find the county in our GBIF list logic or just search for it on the counties page
-        navigate(`/counties?search=${encodeURIComponent(countyName)}`);
+    React.useEffect(() => {
+        const fetchTrending = async () => {
+            try {
+                // Fetch general popular species in Kenya
+                const data = await inaturalistApi.getObservations({
+                    countyName: 'Kenya',
+                    limit: 3
+                });
+                setTrending(data.results || []);
+            } catch (err) {
+                console.error("Failed to fetch trending", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchTrending();
+    }, []);
+
+    const handleSelectCounty = async (countyName) => {
+        try {
+            // Try to find the county ID from the list to enable direct navigation
+            const counties = await gbifApi.getKenyanCounties();
+            const matched = counties.find(c =>
+                c.name.toLowerCase() === countyName.toLowerCase() ||
+                countyName.toLowerCase().includes(c.name.toLowerCase())
+            );
+
+            if (matched) {
+                navigate(`/counties/${encodeURIComponent(matched.id)}`);
+            } else {
+                // Fallback to search if no direct match found
+                navigate(`/counties?search=${encodeURIComponent(countyName)}`);
+            }
+        } catch (err) {
+            navigate(`/counties?search=${encodeURIComponent(countyName)}`);
+        }
     };
     return (
         <div className="space-y-24 pb-12">
@@ -113,6 +151,52 @@ const Home = () => {
                 <div className="bg-slate-950/50 rounded-2xl h-[600px] w-full border border-slate-800 relative shadow-inner overflow-hidden">
                     <KenyaMap onSelectCounty={handleSelectCounty} />
                 </div>
+            </section>
+
+            {/* Trending Species Section */}
+            <section className="space-y-8">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h2 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
+                            <TrendingUp className="text-green-500 w-8 h-8" />
+                            Trending in Kenya
+                        </h2>
+                        <p className="text-slate-400">Most observed species across the country right now.</p>
+                    </div>
+                </div>
+
+                {loading ? (
+                    <ListSkeleton count={3} />
+                ) : (
+                    <div className="grid md:grid-cols-3 gap-8">
+                        {trending.map((item) => (
+                            <div key={item.taxon.id} className="bg-slate-800/50 rounded-3xl overflow-hidden border border-slate-700/50 group hover:border-green-500/50 transition-all flex flex-col">
+                                <div className="h-48 overflow-hidden relative">
+                                    <img
+                                        src={item.taxon.default_photo?.medium_url}
+                                        alt={item.taxon.name}
+                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                    />
+                                    <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 text-white text-xs font-bold">
+                                        {item.count} Observations
+                                    </div>
+                                </div>
+                                <div className="p-6 flex-1 flex flex-col">
+                                    <h3 className="text-xl font-bold text-white mb-1 group-hover:text-green-400 transition-colors">
+                                        {item.taxon.preferred_common_name || item.taxon.name}
+                                    </h3>
+                                    <p className="text-slate-500 italic text-sm mb-4">{item.taxon.name}</p>
+                                    <button
+                                        onClick={() => navigate(`/counties?search=${encodeURIComponent(item.taxon.name)}`)}
+                                        className="mt-auto w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl border border-slate-700 hover:border-green-500/50 transition-all text-sm"
+                                    >
+                                        Explore Habitat
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </section>
         </div>
     );
