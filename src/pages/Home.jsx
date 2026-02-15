@@ -5,6 +5,7 @@ import KenyaMap from '../components/KenyaMap';
 import { gbifApi } from '../services/gbif';
 import { inaturalistApi } from '../services/inaturalist';
 import { ListSkeleton } from '../components/Skeleton';
+import SpeciesModal from '../components/SpeciesModal';
 
 // Using a high-quality placeholder image for hero if specific unsplash one fails, 
 // but sticking to the previous quality one for now.
@@ -14,6 +15,7 @@ const Home = () => {
     const navigate = useNavigate();
     const [trending, setTrending] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedSpecies, setSelectedSpecies] = useState(null);
 
     useEffect(() => {
         const fetchTrending = async () => {
@@ -188,10 +190,14 @@ const Home = () => {
                                     </h3>
                                     <p className="text-slate-500 italic text-sm mb-4">{item.taxon.name}</p>
                                     <button
-                                        onClick={() => navigate(`/counties?search=${encodeURIComponent(item.taxon.name)}`)}
+                                        onClick={() => setSelectedSpecies({
+                                            speciesKey: item.taxon.id,
+                                            commonName: item.taxon.preferred_common_name || item.taxon.name,
+                                            image: item.taxon.default_photo?.medium_url
+                                        })}
                                         className="mt-auto w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl border border-slate-700 hover:border-green-500/50 transition-all text-sm"
                                     >
-                                        Explore Habitat
+                                        View Details
                                     </button>
                                 </div>
                             </div>
@@ -199,6 +205,16 @@ const Home = () => {
                     </div>
                 )}
             </section>
+
+            {/* Species Modal */}
+            {selectedSpecies && (
+                <SpeciesModal
+                    speciesKey={selectedSpecies.speciesKey}
+                    commonName={selectedSpecies.commonName}
+                    image={selectedSpecies.image}
+                    onClose={() => setSelectedSpecies(null)}
+                />
+            )}
         </div>
     );
 };
