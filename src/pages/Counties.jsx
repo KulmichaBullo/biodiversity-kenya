@@ -63,7 +63,7 @@ const Counties = () => {
                 {/* Header & Search */}
                 <div className="flex flex-col md:flex-row justify-between items-end md:items-center gap-6 bg-slate-900/50 p-6 rounded-3xl border border-slate-800 backdrop-blur-sm mb-6 flex-shrink-0">
                     <div>
-                        <h1 className="text-3xl font-bold mb-2 text-white">Kenyan Counties</h1>
+                        <h1 className="font-display text-3xl sm:text-4xl font-bold mb-2 text-white">Kenyan Counties</h1>
                         <p className="text-slate-400">Showing {filteredCounties.length} regions.</p>
                     </div>
 
@@ -72,7 +72,7 @@ const Counties = () => {
                         <input
                             type="text"
                             placeholder="Search or select on map..."
-                            className="w-full pl-12 pr-4 py-4 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:border-green-500 transition-all shadow-inner"
+                            className="tap w-full pl-12 pr-4 py-4 rounded-xl bg-slate-950/80 border border-slate-700 text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:border-green-500 transition-all shadow-inner backdrop-blur-md"
                             value={searchTerm}
                             onChange={(e) => handleSearch(e.target.value)}
                         />
@@ -92,7 +92,7 @@ const Counties = () => {
                                 <Link
                                     to={`/counties/${encodeURIComponent(county.id)}`}
                                     key={county.id}
-                                    className="bg-slate-800 rounded-2xl p-0 overflow-hidden border border-slate-700 hover:border-green-500/50 hover:shadow-2xl hover:shadow-green-900/20 transition-all cursor-pointer group flex flex-col h-full"
+                                    className="glass motif-accent-top rounded-2xl p-0 overflow-hidden border border-slate-700/70 hover:border-green-500/60 hover:shadow-2xl hover:shadow-green-900/20 transition-all cursor-pointer group flex flex-col h-full"
                                 >
                                     {/* Card Header with Feature Image */}
                                     <div className="h-40 bg-slate-900 relative overflow-hidden">
@@ -123,7 +123,7 @@ const Counties = () => {
 
                                         {!img.caption && (
                                             <div className="absolute bottom-3 left-4 z-20 flex items-center space-x-2">
-                                                <div className="bg-green-500/20 p-1.5 rounded-lg backdrop-blur-md border border-green-500/30">
+                                                <div className="motif-chip p-1.5 rounded-lg">
                                                     <MapPin className="w-4 h-4 text-green-400" />
                                                 </div>
                                             </div>

@@ -8,14 +8,14 @@ const Layout = () => {
     return (
         <div className="min-h-screen bg-slate-950 font-sans text-slate-100 selection:bg-green-500/30">
             {/* Navigation */}
-            <nav className="fixed w-full z-50 bg-slate-900/80 backdrop-blur-xl border-b border-slate-800">
+            <nav className="fixed w-full z-50 glass border-b border-slate-800/60">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-16">
                         <Link to="/" className="flex items-center space-x-3 group">
                             <div className="bg-gradient-to-br from-green-500 to-emerald-700 p-2 rounded-lg shadow-lg shadow-green-900/20 group-hover:shadow-green-500/20 transition-all duration-300">
                                 <Leaf className="w-5 h-5 text-white" />
                             </div>
-                            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
+                            <span className="text-xl font-display font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-300">
                                 Kenya Bio
                             </span>
                         </Link>
@@ -49,9 +49,11 @@ const Layout = () => {
 
             {/* Main Content */}
             <main className="pt-20 min-h-screen relative">
-                {/* Ambient Background Effects */}
-                <div className="fixed top-20 left-10 w-96 h-96 bg-green-500/10 rounded-full blur-3xl pointer-events-none -z-10 mix-blend-screen" />
-                <div className="fixed bottom-20 right-10 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none -z-10 mix-blend-screen" />
+                {/* Ambient Background Effects — contained so they never cause horizontal scroll on mobile */}
+                <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+                    <div className="absolute -top-10 -left-10 w-80 h-80 sm:w-96 sm:h-96 bg-green-500/10 rounded-full blur-3xl mix-blend-screen" />
+                    <div className="absolute -bottom-10 -right-10 w-80 h-80 sm:w-96 sm:h-96 bg-emerald-500/10 rounded-full blur-3xl mix-blend-screen" />
+                </div>
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in relative z-10">
                     <Outlet />
@@ -59,7 +61,7 @@ const Layout = () => {
             </main>
 
             {/* Footer */}
-            <footer className="bg-slate-900 border-t border-slate-800 text-slate-400 py-12 mt-12 relative z-10">
+            <footer className="glass border-t border-slate-800/60 text-slate-400 py-12 mt-12 relative z-10">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div>

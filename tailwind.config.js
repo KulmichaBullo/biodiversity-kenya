@@ -16,7 +16,8 @@ export default {
                 'dark-hover': '#334155', // Slate 700
             },
             fontFamily: {
-                sans: ['Inter', 'system-ui', 'sans-serif'],
+                sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                display: ['Fraunces', 'Georgia', 'serif'],
             }
         },
     },

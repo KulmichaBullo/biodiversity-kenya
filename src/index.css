@@ -2,19 +2,137 @@
 
 @theme {
   --color-kenya-green: #22c55e;
+  --color-kenya-green-bright: #34d399;
   --color-kenya-gold: #eab308;
   --color-kenya-red: #ef4444;
   --color-kenya-black: #000000;
   --color-dark-bg: #0f172a;
   --color-dark-card: #1e293b;
   --color-dark-hover: #334155;
-  --font-sans: 'Inter', system-ui, sans-serif;
+
+  /* Typography system */
+  --font-display: 'Fraunces', 'Georgia', serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* ---- Base ---- */
+html {
+  scroll-behavior: smooth;
+  /* Prevent horizontal scroll bugs from decorative blobs / overflow on mobile */
+  overflow-x: hidden;
 }
 
 body {
   background-color: var(--color-dark-bg);
   color: #f1f5f9;
-  /* Slate 100 */
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* Display headlines use Fraunces (the brand "wild heart" voice) */
+.font-display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  letter-spacing: -0.01em;
+}
+
+/* ---- Visual hierarchy opacity ladder ----
+   Primary = white/bold (headlines, key actions)
+   Secondary = slate-300 (descriptions)
+   Tertiary = slate-500 (metadata, counts) */
+.text-tertiary {
+  color: #64748b; /* slate-500 */
+}
+
+/* ---- Motif: recurring "leaf chip" for icons & accent shape ----
+   One shape language across buttons, cards, icons. */
+.motif-chip {
+  border-radius: 1rem; /* rounded-2xl */
+  background: rgba(34, 197, 94, 0.10);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+}
+.motif-accent-top::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 1.25rem;
+  right: 1.25rem;
+  height: 3px;
+  border-radius: 0 0 4px 4px;
+  background: linear-gradient(90deg, var(--color-kenya-green), transparent);
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+.motif-accent-top:hover::before,
+.group:hover .motif-accent-top::before {
+  opacity: 1;
+}
+
+/* ---- Depth: subtle glass + inner highlight ---- */
+.glass {
+  background: rgba(30, 41, 59, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.06),
+    0 10px 30px -10px rgba(0, 0, 0, 0.45);
+}
+
+/* ---- Ambient depth grain (very low opacity so it never distracts) ---- */
+.depth-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* ---- Custom scrollbar (desktop) ---- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #334155 transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+  background-clip: content-box;
+}
+
+/* ---- Mobile: comfortable tap targets & tighter rhythm ---- */
+@media (max-width: 767px) {
+  button,
+  a[role="button"],
+  .tap {
+    min-height: 44px;
+  }
+  .mobile-stack {
+    flex-direction: column;
+  }
+  .mobile-stack > * {
+    width: 100%;
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
 }

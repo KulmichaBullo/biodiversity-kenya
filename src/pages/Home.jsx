@@ -55,49 +55,49 @@ const Home = () => {
         }
     };
     return (
-        <div className="space-y-24 pb-12">
+        <div className="space-y-14 md:space-y-24 pb-12">
             {/* Hero Section */}
-            <section className="relative h-[600px] rounded-[2rem] overflow-hidden shadow-2xl group">
-                <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-900/60 to-transparent z-10 transition-opacity duration-1000" />
+            <section className="relative h-[68vh] min-h-[460px] md:h-[600px] rounded-[1.75rem] md:rounded-[2rem] overflow-hidden shadow-2xl group depth-grain">
+                <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-900/70 to-slate-900/30 z-10 transition-opacity duration-1000" />
                 <img
                     src={HERO_IMAGE}
                     alt="African Savanna"
                     className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-[20s]"
                 />
 
-                <div className="relative z-20 h-full flex flex-col justify-center px-8 md:px-16 text-white max-w-4xl">
-                    <div className="inline-flex items-center space-x-2 bg-green-500/20 backdrop-blur-md px-4 py-2 rounded-full w-fit mb-6 border border-green-500/30">
+                <div className="relative z-20 h-full flex flex-col justify-center px-5 sm:px-8 md:px-16 text-white max-w-4xl">
+                    <div className="inline-flex items-center space-x-2 bg-green-500/20 backdrop-blur-md px-4 py-2 rounded-full w-fit mb-5 border border-green-500/30">
                         <Compass className="w-4 h-4 text-green-400" />
-                        <span className="text-sm font-medium text-green-200">Explore Kenya's Natural Wonders</span>
+                        <span className="text-xs sm:text-sm font-medium text-green-200">Explore Kenya's Natural Wonders</span>
                     </div>
 
-                    <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight tracking-tight">
-                        Discover the <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">Wild Heart</span> <br />
+                    <h1 className="font-display font-bold mb-5 leading-[1.08] tracking-tight text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+                        Discover the <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500">Wild Heart</span> <br className="hidden sm:block" />
                         of Africa.
                     </h1>
 
-                    <p className="text-xl md:text-2xl text-slate-300 mb-10 max-w-2xl leading-relaxed">
+                    <p className="text-base sm:text-xl md:text-2xl text-slate-300 mb-8 max-w-2xl leading-relaxed">
                         A comprehensive bio-data explorer for Kenya's 47 counties.
                         Documenting the rich tapestry of Flora and Fauna.
                     </p>
 
-                    <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mobile-stack">
                         <Link
                             to="/counties"
-                            className="px-8 py-4 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl transition-all flex items-center justify-center shadow-lg shadow-green-900/50 hover:shadow-green-500/30 ring-2 ring-green-600 ring-offset-2 ring-offset-slate-900"
+                            className="tap px-8 py-4 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl transition-all flex items-center justify-center shadow-lg shadow-green-900/50 hover:shadow-green-500/30 ring-2 ring-green-600 ring-offset-2 ring-offset-slate-900"
                         >
                             Start Exploration <ArrowRight className="ml-2 w-5 h-5" />
                         </Link>
                         <Link
                             to="/identify"
-                            className="px-8 py-4 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl transition-all flex items-center justify-center shadow-lg shadow-purple-900/50 hover:shadow-purple-500/30"
+                            className="tap px-8 py-4 bg-slate-800/70 hover:bg-slate-700/70 backdrop-blur-md text-white font-bold rounded-xl transition-all flex items-center justify-center border border-slate-600"
                         >
-                            <Sparkles className="mr-2 w-5 h-5" />
+                            <Sparkles className="mr-2 w-5 h-5 text-green-400" />
                             Identify Species
                         </Link>
                         <a
-                            href="#map-section" // Smooth scroll to map
-                            className="px-8 py-4 bg-slate-800/50 hover:bg-slate-700/50 backdrop-blur-md text-white font-bold rounded-xl transition-all border border-slate-700 flex items-center justify-center"
+                            href="#map-section"
+                            className="tap px-8 py-4 bg-slate-800/40 hover:bg-slate-700/40 backdrop-blur-md text-white font-bold rounded-xl transition-all border border-slate-700/60 flex items-center justify-center"
                         >
                             View Map
                         </a>
@@ -106,38 +106,38 @@ const Home = () => {
             </section>
 
             {/* Stats/Features Grid */}
-            <section className="grid md:grid-cols-3 gap-8">
-                <Link to="/counties" className="bg-slate-800/50 p-8 rounded-3xl border border-slate-700/50 hover:border-green-500/50 hover:bg-slate-800 transition-all group relative overflow-hidden">
+            <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
+                <Link to="/counties" className="glass motif-accent-top rounded-3xl p-7 md:p-8 hover:border-green-500/50 transition-all group relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/10 rounded-full blur-2xl -mr-10 -mt-10 group-hover:bg-green-500/20 transition-all" />
 
-                    <div className="w-14 h-14 bg-slate-700/50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 border border-slate-600">
+                    <div className="motif-chip w-14 h-14 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                         <Map className="w-7 h-7 text-green-400" />
                     </div>
-                    <h3 className="text-2xl font-bold mb-3 text-white">47 Counties</h3>
+                    <h3 className="font-display text-2xl font-bold mb-3 text-white">47 Counties</h3>
                     <p className="text-slate-400 leading-relaxed">
                         Navigate through administrative boundaries to discover region-specific biodiversity.
                     </p>
                 </Link>
 
-                <div className="bg-slate-800/50 p-8 rounded-3xl border border-slate-700/50 hover:border-orange-500/50 hover:bg-slate-800 transition-all group relative overflow-hidden">
+                <div className="glass motif-accent-top rounded-3xl p-7 md:p-8 hover:border-orange-500/50 transition-all group relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 rounded-full blur-2xl -mr-10 -mt-10 group-hover:bg-orange-500/20 transition-all" />
 
-                    <div className="w-14 h-14 bg-slate-700/50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 border border-slate-600">
+                    <div className="motif-chip w-14 h-14 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                         <PawPrint className="w-7 h-7 text-orange-400" />
                     </div>
-                    <h3 className="text-2xl font-bold mb-3 text-white">Rich Fauna</h3>
+                    <h3 className="font-display text-2xl font-bold mb-3 text-white">Rich Fauna</h3>
                     <p className="text-slate-400 leading-relaxed">
                         Data on mammals, birds, reptiles, and insects sourced directly from GBIF occurrences.
                     </p>
                 </div>
 
-                <div className="bg-slate-800/50 p-8 rounded-3xl border border-slate-700/50 hover:border-emerald-500/50 hover:bg-slate-800 transition-all group relative overflow-hidden">
+                <div className="glass motif-accent-top rounded-3xl p-7 md:p-8 hover:border-emerald-500/50 transition-all group relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl -mr-10 -mt-10 group-hover:bg-emerald-500/20 transition-all" />
 
-                    <div className="w-14 h-14 bg-slate-700/50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 border border-slate-600">
+                    <div className="motif-chip w-14 h-14 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                         <TreePine className="w-7 h-7 text-emerald-400" />
                     </div>
-                    <h3 className="text-2xl font-bold mb-3 text-white">Diverse Flora</h3>
+                    <h3 className="font-display text-2xl font-bold mb-3 text-white">Diverse Flora</h3>
                     <p className="text-slate-400 leading-relaxed">
                         Explore botanical observations ranging from coastal mangroves to alpine vegetation.
                     </p>
@@ -145,13 +145,13 @@ const Home = () => {
             </section>
 
             {/* Map Section */}
-            <section id="map-section" className="bg-slate-900 rounded-[2.5rem] p-8 md:p-12 border border-slate-800 shadow-2xl relative overflow-hidden">
+            <section id="map-section" className="glass rounded-[1.75rem] md:rounded-[2.5rem] p-5 md:p-12 border border-slate-800 shadow-2xl relative overflow-hidden">
                 <div className="relative z-10 text-center mb-8">
-                    <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">Interactive Map</h2>
+                    <h2 className="font-display text-3xl md:text-5xl font-bold text-white mb-4">Interactive Map</h2>
                     <p className="text-slate-400 max-w-2xl mx-auto">Select a county geographically to begin your journey.</p>
                 </div>
 
-                <div className="bg-slate-950/50 rounded-2xl h-[600px] w-full border border-slate-800 relative shadow-inner overflow-hidden">
+                <div className="bg-slate-950/60 rounded-2xl h-[420px] sm:h-[520px] md:h-[600px] w-full border border-slate-800 relative shadow-inner overflow-hidden">
                     <KenyaMap onSelectCounty={handleSelectCounty} />
                 </div>
             </section>
@@ -160,7 +160,7 @@ const Home = () => {
             <section className="space-y-8">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h2 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
+                        <h2 className="font-display text-3xl font-bold text-white mb-2 flex items-center gap-3">
                             <TrendingUp className="text-green-500 w-8 h-8" />
                             Trending in Kenya
                         </h2>
@@ -171,10 +171,10 @@ const Home = () => {
                 {loading ? (
                     <ListSkeleton count={3} />
                 ) : (
-                    <div className="grid md:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
                         {trending.map((item) => (
-                            <div key={item.taxon.id} className="bg-slate-800/50 rounded-3xl overflow-hidden border border-slate-700/50 group hover:border-green-500/50 transition-all flex flex-col">
-                                <div className="h-48 overflow-hidden relative">
+                            <div key={item.taxon.id} className="glass motif-accent-top rounded-3xl overflow-hidden border border-slate-700/50 group hover:border-green-500/50 transition-all flex flex-col">
+                                <div className="h-44 sm:h-48 overflow-hidden relative">
                                     <img
                                         src={item.taxon.default_photo?.medium_url}
                                         alt={item.taxon.name}
@@ -185,7 +185,7 @@ const Home = () => {
                                     </div>
                                 </div>
                                 <div className="p-6 flex-1 flex flex-col">
-                                    <h3 className="text-xl font-bold text-white mb-1 group-hover:text-green-400 transition-colors">
+                                    <h3 className="font-display text-xl font-bold text-white mb-1 group-hover:text-green-400 transition-colors">
                                         {item.taxon.preferred_common_name || item.taxon.name}
                                     </h3>
                                     <p className="text-slate-500 italic text-sm mb-4">{item.taxon.name}</p>
@@ -195,7 +195,7 @@ const Home = () => {
                                             commonName: item.taxon.preferred_common_name || item.taxon.name,
                                             image: item.taxon.default_photo?.medium_url
                                         })}
-                                        className="mt-auto w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl border border-slate-700 hover:border-green-500/50 transition-all text-sm"
+                                        className="tap mt-auto w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl border border-slate-700 hover:border-green-500/50 transition-all text-sm"
                                     >
                                         View Details
                                     </button>

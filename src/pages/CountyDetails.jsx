@@ -102,7 +102,7 @@ const CountyDetails = () => {
                         <span className="font-medium">Back to Counties</span>
                     </Link>
 
-                    <div className="bg-slate-900/50 p-6 rounded-3xl border border-slate-800 sticky top-24">
+                    <div className="bg-slate-900/50 p-6 rounded-3xl border border-slate-800 glass sticky top-24">
                         <div className="flex items-center gap-2 mb-6 text-white font-bold text-lg">
                             <Filter className="w-5 h-5 text-green-500" /> Filters
                         </div>
@@ -189,7 +189,7 @@ const CountyDetails = () => {
                         <span className="font-mono text-xs bg-slate-800 text-green-400 px-3 py-1 rounded-full border border-slate-700">REGION: {countyName || key}</span>
                         {selectedClass && <span className="font-mono text-xs bg-slate-800 text-blue-400 px-3 py-1 rounded-full border border-slate-700">FILTER ACTIVE</span>}
                     </div>
-                    <h1 className="text-4xl font-bold text-white mb-2">Biodiversity Explorer</h1>
+                    <h1 className="font-display text-3xl sm:text-4xl font-bold text-white mb-2">Biodiversity Explorer</h1>
                     <p className="text-slate-400">Discovering {activeTab} in this region via iNaturalist.</p>
 
                     {/* Search Filter */}

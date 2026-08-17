@@ -61,11 +61,11 @@ const Identify = () => {
                 </Link>
 
                 <div className="flex items-center gap-3 mb-4">
-                    <div className="p-3 bg-green-500/10 rounded-2xl border border-green-500/30">
+                    <div className="motif-chip p-3 border border-green-500/30">
                         <Sparkles className="w-8 h-8 text-green-500" />
                     </div>
                     <div>
-                        <h1 className="text-4xl font-bold text-white">Identify Species</h1>
+                        <h1 className="font-display text-3xl sm:text-4xl font-bold text-white">Identify Species</h1>
                         <p className="text-slate-400 mt-1">Upload a photo to discover what species it is</p>
                     </div>
                 </div>
@@ -87,7 +87,7 @@ const Identify = () => {
                     {selectedImage && !loading && results.length === 0 && (
                         <button
                             onClick={handleIdentify}
-                            className="w-full mt-6 px-6 py-4 bg-green-600 hover:bg-green-500 text-white rounded-xl font-bold transition-all shadow-lg hover:shadow-green-500/20 flex items-center justify-center gap-2"
+                            className="tap w-full mt-6 px-6 py-4 bg-green-600 hover:bg-green-500 text-white rounded-xl font-bold transition-all shadow-lg hover:shadow-green-500/20 flex items-center justify-center gap-2"
                         >
                             <Sparkles className="w-5 h-5" />
                             Identify Species
@@ -96,8 +96,8 @@ const Identify = () => {
                 </div>
 
                 {/* Instructions */}
-                <div className="bg-slate-900/50 p-6 rounded-3xl border border-slate-800 h-fit">
-                    <h3 className="text-lg font-bold text-white mb-4">How it Works</h3>
+                <div className="glass rounded-3xl border border-slate-800 p-6 h-fit">
+                    <h3 className="font-display text-lg font-bold text-white mb-4">How it Works</h3>
                     <ol className="space-y-3 text-slate-300">
                         <li className="flex items-start gap-3">
                             <div className="w-6 h-6 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-sm font-bold flex-shrink-0">1</div>
@@ -152,7 +152,7 @@ const Identify = () => {
                         Identification Results
                     </h2>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                         {results.map((result, index) => {
                             const taxon = result.taxon;
                             const score = result.combined_score || result.vision_score || result.frequency_score || 0;
@@ -171,10 +171,10 @@ const Identify = () => {
                             return (
                                 <div
                                     key={taxon.id}
-                                    className="bg-slate-900 rounded-2xl overflow-hidden border border-slate-800 hover:border-green-500/50 hover:shadow-2xl hover:shadow-green-900/20 transition-all group cursor-pointer"
+                                    className="glass rounded-2xl overflow-hidden border border-slate-800 hover:border-green-500/50 hover:shadow-2xl hover:shadow-green-900/20 transition-all group cursor-pointer"
                                     onClick={() => setSelectedSpecies({ key: taxon.id, commonName: displayTitle, image: imageUrl })}
                                 >
-                                    <div className="relative h-48 bg-slate-950">
+                                    <div className="relative h-40 sm:h-48 bg-slate-950">
                                         {imageUrl ? (
                                             <img
                                                 src={imageUrl}
