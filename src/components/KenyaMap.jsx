@@ -8,6 +8,8 @@ const GEO_URL = "https://raw.githubusercontent.com/mikelmaron/kenya-election-dat
 const KenyaMap = ({ onSelectCounty, selectedCountyName }) => {
     const [position, setPosition] = useState({ coordinates: [37.9062, -0.0236], zoom: 1 });
     const [geographiesData, setGeographiesData] = useState(null);
+    // Pending selection: first tap selects (highlights), second tap (or confirm) opens.
+    const [pendingSelect, setPendingSelect] = useState(null);
 
     // When selectedCountyName changes, find the feature and zoom to it
     useEffect(() => {
@@ -39,6 +41,21 @@ const KenyaMap = ({ onSelectCounty, selectedCountyName }) => {
         return true;
     };
 
+    // Tap behavior: first tap selects (highlights), tapping the SAME county again opens it.
+    // A mis-tap only selects — it never navigates until the user commits (via second tap or the confirm button).
+    const handleCountyClick = (countyName) => {
+        if (pendingSelect && pendingSelect.toLowerCase() === countyName.toLowerCase()) {
+            // Second tap on the already-selected county -> open it.
+            setPendingSelect(null);
+            onSelectCounty(countyName);
+        } else {
+            // First tap (or tap on a different county) -> just select/highlight.
+            setPendingSelect(countyName);
+        }
+    };
+
+    const highlightName = pendingSelect || selectedCountyName;
+
     return (
         <div className="w-full h-full flex flex-col items-center justify-center relative bg-slate-900 rounded-xl overflow-hidden border border-slate-800">
             <ComposableMap
@@ -64,7 +81,7 @@ const KenyaMap = ({ onSelectCounty, selectedCountyName }) => {
 
                             return geographies.map((geo) => {
                                 const countyName = geo.properties.COUNTY_NAM || geo.properties.Name || geo.properties.name || "Unknown County";
-                                const isSelected = selectedCountyName && countyName.toLowerCase() === selectedCountyName.toLowerCase();
+                                const isSelected = highlightName && countyName.toLowerCase() === highlightName.toLowerCase();
 
                                 return (
                                     <Geography
@@ -72,7 +89,7 @@ const KenyaMap = ({ onSelectCounty, selectedCountyName }) => {
                                         geography={geo}
                                         data-tooltip-id="map-tooltip"
                                         data-tooltip-content={countyName}
-                                        onClick={() => onSelectCounty(countyName)}
+                                        onClick={() => handleCountyClick(countyName)}
                                         style={{
                                             default: {
                                                 fill: isSelected ? "#22c55e" : "#1e293b", // Green if selected, Slate 800 default
@@ -106,14 +123,38 @@ const KenyaMap = ({ onSelectCounty, selectedCountyName }) => {
             {/* Zoom Controls */}
             <div className="absolute bottom-4 right-4 flex flex-col gap-2">
                 <button
-                    className="bg-slate-800 p-2 rounded-lg text-white hover:bg-slate-700 border border-slate-700"
+                    className="bg-slate-800 p-2 rounded-lg text-white hover:bg-slate-700 border border-slate-700 w-9 h-9 flex items-center justify-center"
                     onClick={() => setPosition(pos => ({ ...pos, zoom: pos.zoom * 1.2 }))}
                 >+</button>
                 <button
-                    className="bg-slate-800 p-2 rounded-lg text-white hover:bg-slate-700 border border-slate-700"
+                    className="bg-slate-800 p-2 rounded-lg text-white hover:bg-slate-700 border border-slate-700 w-9 h-9 flex items-center justify-center"
                     onClick={() => setPosition(pos => ({ ...pos, zoom: pos.zoom / 1.2 }))}
                 >-</button>
             </div>
+
+            {/* Pending-selection confirm bar: appears after a county is tapped.
+                Tap the same county again OR this button to open. Prevents accidental navigation. */}
+            {pendingSelect && (
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 w-[min(92%,22rem)] glass rounded-2xl border border-green-500/40 px-4 py-3 flex items-center gap-3 shadow-2xl shadow-black/50 animate-[fadeIn_200ms_ease]">
+                    <div className="flex-1 min-w-0">
+                        <p className="text-[11px] uppercase tracking-wider text-green-300/80 font-semibold">Selected</p>
+                        <p className="text-white font-semibold text-sm truncate">{pendingSelect}</p>
+                    </div>
+                    <button
+                        onClick={() => { const n = pendingSelect; setPendingSelect(null); onSelectCounty(n); }}
+                        className="tap flex-shrink-0 px-4 py-2.5 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl text-sm transition-all shadow-lg shadow-green-900/40"
+                    >
+                        Open
+                    </button>
+                    <button
+                        onClick={() => setPendingSelect(null)}
+                        aria-label="Cancel selection"
+                        className="tap flex-shrink-0 w-10 h-10 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 rounded-xl text-lg leading-none transition-all"
+                    >
+                        ×
+                    </button>
+                </div>
+            )}
         </div>
     );
 };

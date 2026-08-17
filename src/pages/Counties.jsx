@@ -43,10 +43,13 @@ const Counties = () => {
     return (
         <div className="flex flex-col lg:flex-row gap-6">
             {/* Sidebar Map - Hidden on mobile, sticky on desktop */}
-            <div className="hidden lg:block lg:w-1/3 xl:w-1/4 flex-shrink-0">
+            <div className="hidden lg:block lg:w-2/5 xl:w-1/2 flex-shrink-0">
                 <div className="sticky top-24 max-h-[calc(100vh-7rem)] bg-slate-900/50 rounded-3xl border border-slate-800 backdrop-blur-sm p-4 flex flex-col">
-                    <h2 className="text-xl font-bold text-white mb-4 px-2">Interactive Map</h2>
-                    <div className="flex-1 rounded-2xl overflow-hidden border border-slate-800 relative">
+                    <div className="flex items-center justify-between mb-4 px-2">
+                        <h2 className="text-xl font-bold text-white">Interactive Map</h2>
+                        <span className="text-[11px] text-slate-500 hidden xl:inline">Tap a county to select, then Open</span>
+                    </div>
+                    <div className="flex-1 min-h-[420px] rounded-2xl overflow-hidden border border-slate-800 relative">
                         <KenyaMap
                             onSelectCounty={handleSelectCounty}
                             selectedCountyName={searchTerm}
