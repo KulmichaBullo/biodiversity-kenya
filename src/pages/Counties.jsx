@@ -41,10 +41,10 @@ const Counties = () => {
     );
 
     return (
-        <div className="flex flex-col lg:flex-row gap-6 h-[calc(100vh-140px)]">
+        <div className="flex flex-col lg:flex-row gap-6">
             {/* Sidebar Map - Hidden on mobile, sticky on desktop */}
-            <div className="hidden lg:block lg:w-1/3 xl:w-1/4 flex-shrink-0 h-full">
-                <div className="sticky top-24 h-full bg-slate-900/50 rounded-3xl border border-slate-800 backdrop-blur-sm p-4 flex flex-col">
+            <div className="hidden lg:block lg:w-1/3 xl:w-1/4 flex-shrink-0">
+                <div className="sticky top-24 max-h-[calc(100vh-7rem)] bg-slate-900/50 rounded-3xl border border-slate-800 backdrop-blur-sm p-4 flex flex-col">
                     <h2 className="text-xl font-bold text-white mb-4 px-2">Interactive Map</h2>
                     <div className="flex-1 rounded-2xl overflow-hidden border border-slate-800 relative">
                         <KenyaMap
@@ -59,7 +59,7 @@ const Counties = () => {
             </div>
 
             {/* Main List Section */}
-            <div className="flex-1 flex flex-col pointer-events-auto h-full overflow-hidden">
+            <div className="flex-1 flex flex-col pointer-events-auto">
                 {/* Header & Search */}
                 <div className="flex flex-col md:flex-row justify-between items-end md:items-center gap-6 bg-slate-900/50 p-6 rounded-3xl border border-slate-800 backdrop-blur-sm mb-6 flex-shrink-0">
                     <div>
@@ -80,7 +80,7 @@ const Counties = () => {
                 </div>
 
                 {/* Scrollable Grid */}
-                <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar pb-24">
+                <div className="pr-2 custom-scrollbar pb-24">
                     {loading ? (
                         <ListSkeleton count={9} />
                     ) : (

@@ -31,6 +31,14 @@ const KenyaMap = ({ onSelectCounty, selectedCountyName }) => {
         setPosition(position);
     };
 
+    // Prevent the map from hijacking the mouse wheel (so page scroll works on desktop).
+    // Only allow zoom via drag/pan and the +/- buttons below.
+    const filterZoomEvent = (e) => {
+        // Block wheel events; allow ctrl+wheel (pinch-zoom trackpads) and dblclick to pan-zoom if desired
+        if (e.type === 'wheel') return false;
+        return true;
+    };
+
     return (
         <div className="w-full h-full flex flex-col items-center justify-center relative bg-slate-900 rounded-xl overflow-hidden border border-slate-800">
             <ComposableMap
@@ -45,6 +53,7 @@ const KenyaMap = ({ onSelectCounty, selectedCountyName }) => {
                     zoom={position.zoom}
                     center={position.coordinates}
                     onMoveEnd={handleMoveEnd}
+                    filterZoomEvent={filterZoomEvent}
                     minZoom={1}
                     maxZoom={10}
                 >

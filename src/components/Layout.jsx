@@ -48,7 +48,7 @@ const Layout = () => {
             </nav>
 
             {/* Main Content */}
-            <main className="pt-20 min-h-screen relative overflow-hidden">
+            <main className="pt-20 min-h-screen relative">
                 {/* Ambient Background Effects */}
                 <div className="fixed top-20 left-10 w-96 h-96 bg-green-500/10 rounded-full blur-3xl pointer-events-none -z-10 mix-blend-screen" />
                 <div className="fixed bottom-20 right-10 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none -z-10 mix-blend-screen" />
