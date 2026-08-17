@@ -12,6 +12,13 @@ const CountyDetails = () => {
     const [loading, setLoading] = useState(true);
     const [countyName, setCountyName] = useState('');
     const [selectedSpecies, setSelectedSpecies] = useState(null);
+    // Mobile filter panel starts collapsed so the county opens at the top (results first).
+    const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+
+    // Scroll to top whenever the county changes (clean open, no mid-scroll landing).
+    useEffect(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }, [key]);
 
     // Filters State
     const [activeTab, setActiveTab] = useState('fauna'); // 'fauna' | 'flora'
@@ -89,11 +96,91 @@ const CountyDetails = () => {
         return <Leaf className="w-4 h-4 text-green-400" />;
     };
 
+    // Reusable filter panel — rendered in the desktop sidebar AND the mobile drawer.
+    const FilterPanel = ({ onNavigate }) => (
+        <div className="bg-slate-900/50 p-6 rounded-3xl border border-slate-800 glass">
+            <div className="flex items-center gap-2 mb-6 text-white font-bold text-lg">
+                <Filter className="w-5 h-5 text-green-500" /> Filters
+            </div>
+
+            {/* Kingdom Tabs */}
+            <div className="flex p-1 bg-slate-950 rounded-xl mb-6 border border-slate-800">
+                <button
+                    onClick={() => { setActiveTab('fauna'); setSelectedClass(null); }}
+                    className={`flex-1 flex items-center justify-center py-2.5 rounded-lg text-sm font-semibold transition-all ${activeTab === 'fauna' ? 'bg-slate-800 text-white shadow-md' : 'text-slate-500 hover:text-slate-300'}`}
+                >
+                    <PawPrint className="w-4 h-4 mr-2" /> Fauna
+                </button>
+                <button
+                    onClick={() => { setActiveTab('flora'); setSelectedClass(null); }}
+                    className={`flex-1 flex items-center justify-center py-2.5 rounded-lg text-sm font-semibold transition-all ${activeTab === 'flora' ? 'bg-slate-800 text-white shadow-md' : 'text-slate-500 hover:text-slate-300'}`}
+                >
+                    <Leaf className="w-4 h-4 mr-2" /> Flora
+                </button>
+            </div>
+
+            {/* Class Filters */}
+            <div className="space-y-2 mb-8">
+                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Group</h3>
+                <button
+                    onClick={() => { setSelectedClass(null); onNavigate && onNavigate(); }}
+                    className={`w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-colors border ${selectedClass === null ? 'bg-green-500/10 text-green-400 border-green-500/50' : 'bg-transparent text-slate-400 border-transparent hover:bg-slate-800'}`}
+                >
+                    All Results
+                </button>
+
+                {activeTab === 'fauna' && (
+                    <>
+                        <button onClick={() => { setSelectedClass(TAXON_IDS.MAMMALS); onNavigate && onNavigate(); }} className={`w-full text-left px-4 py-2 rounded-xl text-sm transition-colors ${selectedClass === TAXON_IDS.MAMMALS ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50'}`}>Mammals</button>
+                        <button onClick={() => { setSelectedClass(TAXON_IDS.BIRDS); onNavigate && onNavigate(); }} className={`w-full text-left px-4 py-2 rounded-xl text-sm transition-colors ${selectedClass === TAXON_IDS.BIRDS ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50'}`}>Birds</button>
+                        <button onClick={() => { setSelectedClass(TAXON_IDS.REPTILES); onNavigate && onNavigate(); }} className={`w-full text-left px-4 py-2 rounded-xl text-sm transition-colors ${selectedClass === TAXON_IDS.REPTILES ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50'}`}>Reptiles</button>
+                        <button onClick={() => { setSelectedClass(TAXON_IDS.AMPHIBIANS); onNavigate && onNavigate(); }} className={`w-full text-left px-4 py-2 rounded-xl text-sm transition-colors ${selectedClass === TAXON_IDS.AMPHIBIANS ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50'}`}>Amphibians</button>
+                        <button onClick={() => { setSelectedClass(TAXON_IDS.FISHES); onNavigate && onNavigate(); }} className={`w-full text-left px-4 py-2 rounded-xl text-sm transition-colors ${selectedClass === TAXON_IDS.FISHES ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50'}`}>Fishes</button>
+
+                        {/* Invertebrates - Expandable */}
+                        <div>
+                            <div className="flex items-center gap-1">
+                                <button
+                                    onClick={() => setExpandedFilters(prev => ({ ...prev, invertebrates: !prev.invertebrates }))}
+                                    className="p-1 hover:bg-slate-800 rounded transition-colors"
+                                >
+                                    {expandedFilters.invertebrates ? (
+                                        <ChevronDown className="w-4 h-4 text-slate-500" />
+                                    ) : (
+                                        <ChevronRight className="w-4 h-4 text-slate-500" />
+                                    )}
+                                </button>
+                                <button onClick={() => { setSelectedClass(TAXON_IDS.INSECTS); onNavigate && onNavigate(); }} className={`flex-1 text-left px-4 py-2 rounded-xl text-sm transition-colors ${selectedClass === TAXON_IDS.INSECTS ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50'}`}>Invertebrates</button>
+                            </div>
+                            {expandedFilters.invertebrates && (
+                                <div className="ml-8 mt-1 space-y-1 border-l-2 border-slate-800 pl-3">
+                                    <button onClick={() => { setSelectedClass(TAXON_IDS.INSECTS); onNavigate && onNavigate(); }} className={`w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors ${selectedClass === TAXON_IDS.INSECTS ? 'bg-green-500/20 text-green-400 font-semibold' : 'text-slate-500 hover:text-slate-300 hover:bg-slate-800/30'}`}>Insects</button>
+                                    <button onClick={() => { setSelectedClass(TAXON_IDS.BUTTERFLIES); onNavigate && onNavigate(); }} className={`w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors ${selectedClass === TAXON_IDS.BUTTERFLIES ? 'bg-green-500/20 text-green-400 font-semibold' : 'text-slate-500 hover:text-slate-300 hover:bg-slate-800/30'}`}>Butterflies</button>
+                                    <button onClick={() => { setSelectedClass(TAXON_IDS.ARACHNIDS); onNavigate && onNavigate(); }} className={`w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors ${selectedClass === TAXON_IDS.ARACHNIDS ? 'bg-green-500/20 text-green-400 font-semibold' : 'text-slate-500 hover:text-slate-300 hover:bg-slate-800/30'}`}>Arachnids</button>
+                                </div>
+                            )}
+                        </div>
+                    </>
+                )}
+
+                {activeTab === 'flora' && (
+                    <>
+                        <button onClick={() => { setSelectedClass(TAXON_IDS.FLOWERING_PLANTS); onNavigate && onNavigate(); }} className={`w-full text-left px-4 py-2 rounded-xl text-sm transition-colors ${selectedClass === TAXON_IDS.FLOWERING_PLANTS ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50'}`}>Flowering Plants</button>
+                        <button onClick={() => { setSelectedClass(TAXON_IDS.GRASSES); onNavigate && onNavigate(); }} className={`w-full text-left px-4 py-2 rounded-xl text-sm transition-colors ${selectedClass === TAXON_IDS.GRASSES ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50'}`}>Grasses</button>
+                        <button onClick={() => { setSelectedClass(TAXON_IDS.FERNS); onNavigate && onNavigate(); }} className={`w-full text-left px-4 py-2 rounded-xl text-sm transition-colors ${selectedClass === TAXON_IDS.FERNS ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50'}`}>Ferns</button>
+                        <button onClick={() => { setSelectedClass(TAXON_IDS.MOSSES); onNavigate && onNavigate(); }} className={`w-full text-left px-4 py-2 rounded-xl text-sm transition-colors ${selectedClass === TAXON_IDS.MOSSES ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50'}`}>Mosses</button>
+                        <button onClick={() => { setSelectedClass(TAXON_IDS.CONIFERS); onNavigate && onNavigate(); }} className={`w-full text-left px-4 py-2 rounded-xl text-sm transition-colors ${selectedClass === TAXON_IDS.CONIFERS ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50'}`}>Conifers</button>
+                    </>
+                )}
+            </div>
+        </div>
+    );
+
     return (
         <div className="flex flex-col lg:flex-row gap-8 min-h-screen">
-            {/* Sidebar Filters */}
-            <aside className="w-full lg:w-64 flex-shrink-0 space-y-8">
-                <div>
+            {/* Desktop sidebar Filters — always visible on lg+ */}
+            <aside className="hidden lg:block w-64 flex-shrink-0">
+                <div className="sticky top-24">
                     <Link
                         to="/counties"
                         className="inline-flex items-center text-slate-400 hover:text-green-400 transition-colors group mb-6"
@@ -101,88 +188,42 @@ const CountyDetails = () => {
                         <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
                         <span className="font-medium">Back to Counties</span>
                     </Link>
-
-                    <div className="bg-slate-900/50 p-6 rounded-3xl border border-slate-800 glass sticky top-24">
-                        <div className="flex items-center gap-2 mb-6 text-white font-bold text-lg">
-                            <Filter className="w-5 h-5 text-green-500" /> Filters
-                        </div>
-
-                        {/* Kingdom Tabs */}
-                        <div className="flex p-1 bg-slate-950 rounded-xl mb-6 border border-slate-800">
-                            <button
-                                onClick={() => { setActiveTab('fauna'); setSelectedClass(null); }}
-                                className={`flex-1 flex items-center justify-center py-2.5 rounded-lg text-sm font-semibold transition-all ${activeTab === 'fauna' ? 'bg-slate-800 text-white shadow-md' : 'text-slate-500 hover:text-slate-300'}`}
-                            >
-                                <PawPrint className="w-4 h-4 mr-2" /> Fauna
-                            </button>
-                            <button
-                                onClick={() => { setActiveTab('flora'); setSelectedClass(null); }}
-                                className={`flex-1 flex items-center justify-center py-2.5 rounded-lg text-sm font-semibold transition-all ${activeTab === 'flora' ? 'bg-slate-800 text-white shadow-md' : 'text-slate-500 hover:text-slate-300'}`}
-                            >
-                                <Leaf className="w-4 h-4 mr-2" /> Flora
-                            </button>
-                        </div>
-
-                        {/* Class Filters */}
-                        <div className="space-y-2 mb-8">
-                            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Group</h3>
-                            <button
-                                onClick={() => setSelectedClass(null)}
-                                className={`w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-colors border ${selectedClass === null ? 'bg-green-500/10 text-green-400 border-green-500/50' : 'bg-transparent text-slate-400 border-transparent hover:bg-slate-800'}`}
-                            >
-                                All Results
-                            </button>
-
-                            {activeTab === 'fauna' && (
-                                <>
-                                    <button onClick={() => setSelectedClass(TAXON_IDS.MAMMALS)} className={`w-full text-left px-4 py-2 rounded-xl text-sm transition-colors ${selectedClass === TAXON_IDS.MAMMALS ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50'}`}>Mammals</button>
-                                    <button onClick={() => setSelectedClass(TAXON_IDS.BIRDS)} className={`w-full text-left px-4 py-2 rounded-xl text-sm transition-colors ${selectedClass === TAXON_IDS.BIRDS ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50'}`}>Birds</button>
-                                    <button onClick={() => setSelectedClass(TAXON_IDS.REPTILES)} className={`w-full text-left px-4 py-2 rounded-xl text-sm transition-colors ${selectedClass === TAXON_IDS.REPTILES ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50'}`}>Reptiles</button>
-                                    <button onClick={() => setSelectedClass(TAXON_IDS.AMPHIBIANS)} className={`w-full text-left px-4 py-2 rounded-xl text-sm transition-colors ${selectedClass === TAXON_IDS.AMPHIBIANS ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50'}`}>Amphibians</button>
-                                    <button onClick={() => setSelectedClass(TAXON_IDS.FISHES)} className={`w-full text-left px-4 py-2 rounded-xl text-sm transition-colors ${selectedClass === TAXON_IDS.FISHES ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50'}`}>Fishes</button>
-
-                                    {/* Invertebrates - Expandable */}
-                                    <div>
-                                        <div className="flex items-center gap-1">
-                                            <button
-                                                onClick={() => setExpandedFilters(prev => ({ ...prev, invertebrates: !prev.invertebrates }))}
-                                                className="p-1 hover:bg-slate-800 rounded transition-colors"
-                                            >
-                                                {expandedFilters.invertebrates ? (
-                                                    <ChevronDown className="w-4 h-4 text-slate-500" />
-                                                ) : (
-                                                    <ChevronRight className="w-4 h-4 text-slate-500" />
-                                                )}
-                                            </button>
-                                            <button onClick={() => setSelectedClass(TAXON_IDS.INSECTS)} className={`flex-1 text-left px-4 py-2 rounded-xl text-sm transition-colors ${selectedClass === TAXON_IDS.INSECTS ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50'}`}>Invertebrates</button>
-                                        </div>
-                                        {expandedFilters.invertebrates && (
-                                            <div className="ml-8 mt-1 space-y-1 border-l-2 border-slate-800 pl-3">
-                                                <button onClick={() => setSelectedClass(TAXON_IDS.INSECTS)} className={`w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors ${selectedClass === TAXON_IDS.INSECTS ? 'bg-green-500/20 text-green-400 font-semibold' : 'text-slate-500 hover:text-slate-300 hover:bg-slate-800/30'}`}>Insects</button>
-                                                <button onClick={() => setSelectedClass(TAXON_IDS.BUTTERFLIES)} className={`w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors ${selectedClass === TAXON_IDS.BUTTERFLIES ? 'bg-green-500/20 text-green-400 font-semibold' : 'text-slate-500 hover:text-slate-300 hover:bg-slate-800/30'}`}>Butterflies</button>
-                                                <button onClick={() => setSelectedClass(TAXON_IDS.ARACHNIDS)} className={`w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors ${selectedClass === TAXON_IDS.ARACHNIDS ? 'bg-green-500/20 text-green-400 font-semibold' : 'text-slate-500 hover:text-slate-300 hover:bg-slate-800/30'}`}>Arachnids</button>
-                                            </div>
-                                        )}
-                                    </div>
-                                </>
-                            )}
-
-                            {activeTab === 'flora' && (
-                                <>
-                                    <button onClick={() => setSelectedClass(TAXON_IDS.FLOWERING_PLANTS)} className={`w-full text-left px-4 py-2 rounded-xl text-sm transition-colors ${selectedClass === TAXON_IDS.FLOWERING_PLANTS ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50'}`}>Flowering Plants</button>
-                                    <button onClick={() => setSelectedClass(TAXON_IDS.GRASSES)} className={`w-full text-left px-4 py-2 rounded-xl text-sm transition-colors ${selectedClass === TAXON_IDS.GRASSES ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50'}`}>Grasses</button>
-                                    <button onClick={() => setSelectedClass(TAXON_IDS.FERNS)} className={`w-full text-left px-4 py-2 rounded-xl text-sm transition-colors ${selectedClass === TAXON_IDS.FERNS ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50'}`}>Ferns</button>
-                                    <button onClick={() => setSelectedClass(TAXON_IDS.MOSSES)} className={`w-full text-left px-4 py-2 rounded-xl text-sm transition-colors ${selectedClass === TAXON_IDS.MOSSES ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50'}`}>Mosses</button>
-                                    <button onClick={() => setSelectedClass(TAXON_IDS.CONIFERS)} className={`w-full text-left px-4 py-2 rounded-xl text-sm transition-colors ${selectedClass === TAXON_IDS.CONIFERS ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50'}`}>Conifers</button>
-                                </>
-                            )}
-                        </div>
-                    </div>
+                    <FilterPanel />
                 </div>
             </aside>
 
             {/* Main Content */}
             <main className="flex-1">
+                {/* Mobile: Back link + collapsed Filter disclosure (sticky) */}
+                <div className="lg:hidden mb-4 space-y-3">
+                    <Link
+                        to="/counties"
+                        className="inline-flex items-center text-slate-400 hover:text-green-400 transition-colors group"
+                    >
+                        <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+                        <span className="font-medium">Back to Counties</span>
+                    </Link>
+
+                    <button
+                        onClick={() => setMobileFiltersOpen(o => !o)}
+                        className="tap w-full flex items-center justify-between px-5 py-3.5 rounded-2xl glass border border-slate-700/70 text-white font-semibold"
+                        aria-expanded={mobileFiltersOpen}
+                    >
+                        <span className="flex items-center gap-2">
+                            <Filter className="w-5 h-5 text-green-400" />
+                            Filters
+                            {selectedClass && <span className="text-[10px] font-bold bg-green-500 text-slate-900 px-2 py-0.5 rounded-full">Active</span>}
+                        </span>
+                        <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform ${mobileFiltersOpen ? 'rotate-180' : ''}`} />
+                    </button>
+
+                    {mobileFiltersOpen && (
+                        <div className="animate-[fadeIn_200ms_ease]">
+                            <FilterPanel onNavigate={() => setMobileFiltersOpen(false)} />
+                        </div>
+                    )}
+                </div>
+
                 {/* Header */}
                 <div className="mb-8">
                     <div className="flex items-center space-x-3 mb-2">
