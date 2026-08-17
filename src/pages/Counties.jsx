@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { gbifApi } from '../services/gbif';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Search, MapPin, ArrowRight } from 'lucide-react';
+import { Search, MapPin, ArrowRight, Leaf, PawPrint } from 'lucide-react';
 import KenyaMap from '../components/KenyaMap';
 import { getCountyImage } from '../data/countyImages';
 import { ListSkeleton } from '../components/Skeleton';
@@ -85,7 +85,10 @@ const Counties = () => {
                         <ListSkeleton count={9} />
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                            {filteredCounties.map((county) => (
+                            {filteredCounties.map((county) => {
+                                const img = getCountyImage(county.name);
+                                const isFlora = img.kingdom === 'flora';
+                                return (
                                 <Link
                                     to={`/counties/${encodeURIComponent(county.id)}`}
                                     key={county.id}
@@ -94,17 +97,37 @@ const Counties = () => {
                                     {/* Card Header with Feature Image */}
                                     <div className="h-40 bg-slate-900 relative overflow-hidden">
                                         <img
-                                            src={getCountyImage(county.name)}
+                                            src={img.url}
                                             alt={county.name}
+                                            loading="lazy"
                                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                         />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-90" />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/30 to-transparent opacity-95" />
 
-                                        <div className="absolute bottom-3 left-4 z-20 flex items-center space-x-2">
-                                            <div className="bg-green-500/20 p-1.5 rounded-lg backdrop-blur-md border border-green-500/30">
-                                                <MapPin className="w-4 h-4 text-green-400" />
+                                        {/* Signature species caption (correlates with top local flora/fauna) */}
+                                        {img.caption && (
+                                            <div className="absolute bottom-3 left-4 right-4 z-20">
+                                                <div className="flex items-center gap-1.5 text-[11px] font-medium text-emerald-300/90 mb-1">
+                                                    {isFlora
+                                                        ? <Leaf className="w-3 h-3" />
+                                                        : <PawPrint className="w-3 h-3" />}
+                                                    <span className="uppercase tracking-wider opacity-80">
+                                                        {isFlora ? 'Signature Flora' : 'Signature Fauna'}
+                                                    </span>
+                                                </div>
+                                                <p className="text-sm font-semibold text-white leading-tight drop-shadow">
+                                                    {img.caption}
+                                                </p>
                                             </div>
-                                        </div>
+                                        )}
+
+                                        {!img.caption && (
+                                            <div className="absolute bottom-3 left-4 z-20 flex items-center space-x-2">
+                                                <div className="bg-green-500/20 p-1.5 rounded-lg backdrop-blur-md border border-green-500/30">
+                                                    <MapPin className="w-4 h-4 text-green-400" />
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
 
                                     <div className="p-5 flex-1 flex flex-col">
@@ -119,7 +142,8 @@ const Counties = () => {
                                         </p>
                                     </div>
                                 </Link>
-                            ))}
+                                );
+                            })}
                         </div>
                     )}
                 </div>
